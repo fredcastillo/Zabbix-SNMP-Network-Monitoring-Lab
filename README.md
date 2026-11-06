@@ -1,6 +1,6 @@
 # 📡 Monitoreo SNMP con Zabbix y DHCP en GNS3 — Cisco 7200 + IOSvL2
 
-[![GNS3](https://img.shields.io/badge/Laboratorio-GNS3-7d5fff?style=for-the-badge)](docs/01-arquitectura.md) [![Cisco 7200](https://img.shields.io/badge/Router-Cisco%207200-1BA0D7?style=for-the-badge&logo=cisco&logoColor=white)](docs/02-router-r1.md) [![IOSvL2](https://img.shields.io/badge/Switch-IOSvL2-1BA0D7?style=for-the-badge&logo=cisco&logoColor=white)](docs/03-switch-sw1.md) [![Zabbix](https://img.shields.io/badge/Zabbix-7.0%20LTS-D40000?style=for-the-badge&logo=zabbix&logoColor=white)](docs/04-contenedor-zabbix.md) [![Docker](https://img.shields.io/badge/Docker-Contenedor-2496ED?style=for-the-badge&logo=docker&logoColor=white)](docker/Zabbix) [![SNMP](https://img.shields.io/badge/SNMPv2c-Solo%20lectura-2ea44f?style=for-the-badge)](docs/09-seguridad.md)
+[![GNS3](https://img.shields.io/badge/Laboratorio-GNS3-7d5fff?style=for-the-badge)](docs/01-arquitectura.md) [![Cisco 7200](https://img.shields.io/badge/Router-Cisco%207200-1BA0D7?style=for-the-badge&logo=cisco&logoColor=white)](docs/02-router-r1.md) [![IOSvL2](https://img.shields.io/badge/Switch-IOSvL2-1BA0D7?style=for-the-badge&logo=cisco&logoColor=white)](docs/03-switch-sw1.md) [![Zabbix](https://img.shields.io/badge/Zabbix-7.0%20LTS-D40000?style=for-the-badge&logo=zabbix&logoColor=white)](docs/04-contenedor-zabbix.md) [![Docker Hub](https://img.shields.io/badge/Docker_Hub-zabbix--server-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://hub.docker.com/r/fredcastillo/zabbix-server) [![SNMP](https://img.shields.io/badge/SNMPv2c-Solo%20lectura-2ea44f?style=for-the-badge)](docs/09-seguridad.md)
 
 > **Estudiante:** Fred Sneyder Castillo Apolinar | **Matrícula:** 2025-2175 | **Asignatura:** Seguridad de Redes | **Práctica:** A2 | **Entorno:** GNS3
 
@@ -208,7 +208,7 @@ Resultados detallados de cada prueba: [`docs/06-verificacion.md`](docs/06-verifi
 
 * * *
 
-## 📸 Evidencias mínimas
+## Evidencias mínimas
 
 | Archivo                            | Evidencia                                        |
 |------------------------------------|--------------------------------------------------|
@@ -226,7 +226,7 @@ Resultados detallados de cada prueba: [`docs/06-verificacion.md`](docs/06-verifi
 
 * * *
 
-## 📂 Running-Configs
+## Running-Configs
 
 - [R1 — running-config](configs/R1/running-config.txt)
 - [SW1 — running-config](configs/SW1/running-config.txt)
@@ -249,7 +249,7 @@ Referencia detallada de cada script: [`docs/08-referencia-scripts.md`](docs/08-r
 
 * * *
 
-## 📚 Documentación técnica
+## Documentación técnica
 
 | Documento                                                    | Contenido                                       |
 |--------------------------------------------------------------|-------------------------------------------------|
@@ -267,10 +267,23 @@ Versión en inglés: [README-EN.md](README-EN.md)
 
 * * *
 
+### Imagen Docker publicada
+
+La imagen personalizada está disponible públicamente en Docker Hub.
+
+**Docker Hub:** [fredcastillo/zabbix-server](https://hub.docker.com/r/fredcastillo/zabbix-server)
+
+Para descargar la versión utilizada en este laboratorio:
+
+\```bash
+docker pull fredcastillo/zabbix-server:7.0-v1
+\```
+
 ## 👨‍💻 Autor
 
 **Fred Castillo**  
-*Estudiante de Tecnólogo en Seguridad Informática*  
-*Aspirante a Red Team | Seguridad Ofensiva*
+*Tecnólogo en Seguridad Informática*  
+*Red Team | Seguridad Ofensiva*
 
 [![LinkedIn](https://img.shields.io/badge/LinkedIn-Fred%20Castillo-0077B5?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/fredcastillo11/) [![GitHub](https://img.shields.io/badge/GitHub-fredcastillo-100000?style=for-the-badge&logo=github)](https://github.com/fredcastillo)
+[![Docker Hub](https://img.shields.io/badge/Docker_Hub-fredcastillo-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://hub.docker.com/u/fredcastillo)
