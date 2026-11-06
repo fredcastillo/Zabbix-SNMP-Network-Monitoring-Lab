@@ -1,0 +1,35 @@
+enable
+configure terminal
+hostname SW1-20252175
+no ip domain-lookup
+service timestamps debug datetime msec localtime
+service timestamps log datetime msec localtime
+clock timezone AST -4
+no ip routing
+interface Vlan1
+ description Gestion SW1
+ ip address 10.21.75.2 255.255.255.0
+ no shutdown
+exit
+ip default-gateway 10.21.75.1
+interface GigabitEthernet0/0
+ description Enlace hacia R1
+ switchport mode access
+ no shutdown
+exit
+interface GigabitEthernet0/1
+ description Servidor ZABBIX (cliente DHCP)
+ switchport mode access
+ spanning-tree portfast
+ no shutdown
+exit
+access-list 10 remark SNMP-RO solo desde la LAN
+access-list 10 permit 10.21.75.0 0.0.0.255
+snmp-server community RO_20252175 RO 10
+snmp-server location Santo Domingo - Lab A2
+snmp-server contact 20252175
+line con 0
+ exec-timeout 0 0
+ logging synchronous
+end
+write memory

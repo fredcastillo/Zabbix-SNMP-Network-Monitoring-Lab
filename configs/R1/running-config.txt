@@ -1,0 +1,143 @@
+Building configuration...
+
+Current configuration : 1828 bytes
+!
+version 15.2
+service timestamps debug datetime msec localtime
+service timestamps log datetime msec localtime
+!
+hostname R1-20252175
+!
+boot-start-marker
+boot-end-marker
+!
+!
+!
+no aaa new-model
+clock timezone AST -4 0
+no ip icmp rate-limit unreachable
+!
+!
+!
+ip dhcp excluded-address 10.21.75.1 10.21.75.10
+!
+ip dhcp pool LAN-20252175
+ network 10.21.75.0 255.255.255.0
+ default-router 10.21.75.1
+ dns-server 8.8.8.8
+ domain-name lab.local
+ lease 0 8
+!
+!
+!
+no ip domain lookup
+ip cef
+no ipv6 cef
+!
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+ip tcp synwait-time 5
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface FastEthernet0/0
+ description LAN 10.21.75.0/24 hacia SW1
+ ip address 10.21.75.1 255.255.255.0
+ duplex full
+!
+interface GigabitEthernet1/0
+ no ip address
+ shutdown
+ negotiation auto
+!
+interface GigabitEthernet2/0
+ no ip address
+ shutdown
+ negotiation auto
+!
+interface FastEthernet3/0
+ no ip address
+ shutdown
+ speed auto
+ duplex auto
+!
+interface FastEthernet3/1
+ no ip address
+ shutdown
+ speed auto
+ duplex auto
+!
+interface FastEthernet4/0
+ no ip address
+ shutdown
+ speed auto
+ duplex auto
+!
+interface FastEthernet4/1
+ no ip address
+ shutdown
+ speed auto
+ duplex auto
+!
+interface FastEthernet5/0
+ no ip address
+ shutdown
+ speed auto
+ duplex auto
+!
+interface FastEthernet5/1
+ no ip address
+ shutdown
+ speed auto
+ duplex auto
+!
+ip forward-protocol nd
+!
+!
+no ip http server
+no ip http secure-server
+!
+access-list 10 remark SNMP-RO solo desde la LAN
+access-list 10 permit 10.21.75.0 0.0.0.255
+!
+snmp-server community RO_20252175 RO 10
+snmp-server location Santo Domingo - Lab A2
+snmp-server contact 20252175
+!
+!
+control-plane
+!
+!
+line con 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line aux 0
+ exec-timeout 0 0
+ privilege level 15
+ logging synchronous
+ stopbits 1
+line vty 0 4
+ login
+!
+!
+end

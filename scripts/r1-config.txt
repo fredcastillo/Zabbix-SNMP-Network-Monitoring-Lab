@@ -1,0 +1,30 @@
+enable
+configure terminal
+hostname R1-20252175
+no ip domain lookup
+service timestamps debug datetime msec localtime
+service timestamps log datetime msec localtime
+clock timezone AST -4
+interface FastEthernet0/0
+ description LAN 10.21.75.0/24 hacia SW1
+ ip address 10.21.75.1 255.255.255.0
+ no shutdown
+exit
+ip dhcp excluded-address 10.21.75.1 10.21.75.10
+ip dhcp pool LAN-20252175
+ network 10.21.75.0 255.255.255.0
+ default-router 10.21.75.1
+ dns-server 8.8.8.8
+ domain-name lab.local
+ lease 0 8
+exit
+access-list 10 remark SNMP-RO solo desde la LAN
+access-list 10 permit 10.21.75.0 0.0.0.255
+snmp-server community RO_20252175 RO 10
+snmp-server location Santo Domingo - Lab A2
+snmp-server contact 20252175
+line con 0
+ logging synchronous
+ exec-timeout 0 0
+end
+write memory
