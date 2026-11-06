@@ -1,12 +1,20 @@
+<div align="center">
+    
 # 📡 SNMP Monitoring with Zabbix and DHCP on GNS3 — Cisco 7200 + IOSvL2
 
 [![GNS3](https://img.shields.io/badge/Lab-GNS3-7d5fff?style=for-the-badge)](docs/01-arquitectura.md) [![Cisco 7200](https://img.shields.io/badge/Router-Cisco%207200-1BA0D7?style=for-the-badge&logo=cisco&logoColor=white)](docs/02-router-r1.md) [![IOSvL2](https://img.shields.io/badge/Switch-IOSvL2-1BA0D7?style=for-the-badge&logo=cisco&logoColor=white)](docs/03-switch-sw1.md) [![Zabbix](https://img.shields.io/badge/Zabbix-7.0%20LTS-D40000?style=for-the-badge&logo=zabbix&logoColor=white)](docs/04-contenedor-zabbix.md) [![Docker](https://img.shields.io/badge/Docker-Container-2496ED?style=for-the-badge&logo=docker&logoColor=white)](docker/Zabbix)[![Docker Hub](https://img.shields.io/badge/Docker_Hub-zabbix--server-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://hub.docker.com/r/fredcastillo/zabbix-server) [![SNMP](https://img.shields.io/badge/SNMPv2c-Read--only-2ea44f?style=for-the-badge)](docs/09-seguridad.md)
+
+</div>
 
 > **Student:** Fred Sneyder Castillo Apolinar | **Student ID:** 2025-2175 | **Course:** Network Security | **Assignment:** A2 | **Environment:** GNS3
 
 ## 🎥 DEMONSTRATION VIDEO
 
-[![Watch the video](https://img.youtube.com/vi/VIDEO_ID/hqdefault.jpg)](https://www.youtube.com/watch?v=VIDEO_ID)
+<p align="center">
+  <a href="https://youtu.be/K6qE3cIjSIw">
+    <img src="https://img.youtube.com/vi/K6qE3cIjSIw/maxresdefault.jpg" alt="Ver video" width="960">
+  </a>
+</p>
 
 * * *
 
