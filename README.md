@@ -144,30 +144,53 @@ snmp-server community RO_20252175 RO 10
 
 ## 📦 Servidor Zabbix (contenedor Docker)
 
-Imagen `zabbix:7.0`, construida desde el `Dockerfile` de [`docker/Zabbix`](docker/Zabbix). Contiene en un solo contenedor:
+La infraestructura utiliza una imagen Docker personalizada basada en **Zabbix 7.0 LTS**, desarrollada para funcionar como un nodo independiente dentro de GNS3.
 
-| Componente              | Función                                              |
-|-------------------------|------------------------------------------------------|
-| Zabbix server 7.0 LTS   | Motor de recolección SNMP                            |
-| Zabbix agent 2          | Monitoreo del propio servidor                        |
-| MariaDB                 | Base de datos de Zabbix (precargada en la imagen)    |
-| Apache + PHP            | Frontend web                                         |
-| Firefox ESR + openbox   | Interfaz gráfica sobre la consola VNC de GNS3        |
-| supervisord             | Gestor de procesos del contenedor                    |
-| dhclient                | Cliente DHCP en `eth0`                               |
+La imagen integra Zabbix Server, Zabbix Agent 2, MariaDB, Apache/PHP, Firefox ESR y Openbox, además de herramientas de diagnóstico de red y SNMP.
 
-Plantilla en GNS3:
+**Imagen publicada:** [fredcastillo/zabbix-server](https://hub.docker.com/r/fredcastillo/zabbix-server)
 
-| Campo                             | Valor              |
-|-----------------------------------|--------------------|
-| Name                              | `Zabbix`           |
-| Adapters                          | 1                  |
-| Console type                      | `vnc`              |
-| Console resolution                | `1280x800`         |
-| Additional persistent directories | `/var/lib/mysql`   |
+**Tag utilizado en este laboratorio:** `7.0-v1`
 
-Documentación completa: [`docs/04-contenedor-zabbix.md`](docs/04-contenedor-zabbix.md) y [`docs/07-persistencia.md`](docs/07-persistencia.md).
+### Componentes
 
+| Componente | Función |
+|---|---|
+| Zabbix Server 7.0 LTS | Monitorización centralizada mediante SNMP. |
+| Zabbix Agent 2 | Monitorización del propio contenedor. |
+| MariaDB | Almacenamiento de configuración y datos. |
+| Apache + PHP | Interfaz web de Zabbix. |
+| Firefox ESR + Openbox | Entorno gráfico mediante VNC en GNS3. |
+| DHCP Client | Obtención dinámica de IP en `eth0`. |
+| SNMP Utilities | Consultas y diagnóstico de red. |
+
+### Imagen Docker publicada
+
+| Tag | Descripción |
+|---|---|
+| `7.0-v1` | Imagen utilizada y validada en la práctica A2. |
+| `latest` | Alias de la misma versión V1. |
+
+Para descargar exactamente la imagen utilizada:
+
+```bash
+docker pull fredcastillo/zabbix-server:7.0-v1
+```
+
+### Configuración de persistencia en GNS3
+
+| Parámetro | Valor |
+|---|---|
+| Console type | `vnc` |
+| Resolution | `1280x800` |
+| Network configuration | DHCP |
+| Persistent directory | `/var/lib/mysql` |
+
+La persistencia de MariaDB permite conservar hosts, plantillas, credenciales y datos de monitorización entre reinicios del proyecto.
+
+**Código fuente:** [`docker/Zabbix/`](docker/Zabbix)
+
+**Documentación técnica:** [`04-contenedor-zabbix.md`](docs/04-contenedor-zabbix.md) · [`07-persistencia.md`](docs/07-persistencia.md)
 * * *
 
 ## Validación funcional
@@ -235,15 +258,15 @@ Resultados detallados de cada prueba: [`docs/06-verificacion.md`](docs/06-verifi
 
 ## 📜 Scripts y comandos utilizados
 
-| Archivo                                                      | Descripción                                      |
-|--------------------------------------------------------------|--------------------------------------------------|
-| [`scripts/r1-config.txt`](scripts/r1-config.txt)             | Configuración aplicada en R1                     |
-| [`scripts/sw1-config.txt`](scripts/sw1-config.txt)           | Configuración aplicada en SW1                    |
-| [`scripts/verification-commands.md`](scripts/verification-commands.md) | Comandos de verificación                |
-| [`scripts/build-image.sh`](scripts/build-image.sh)           | Construcción de la imagen `zabbix:7.0`           |
-| [`scripts/test-container.sh`](scripts/test-container.sh)     | Prueba del contenedor fuera de GNS3              |
-| [`scripts/publish-image.sh`](scripts/publish-image.sh)       | Publicación de la imagen en Docker Hub           |
-| [`docker/Zabbix/`](docker/Zabbix)                            | Dockerfile y scripts internos del contenedor     |
+| Archivo                                                                | Descripción                                                 |
+|------------------------------------------------------------------------|-------------------------------------------------------------|
+| [`scripts/r1-config.txt`](scripts/r1-config.txt)                       | Configuración aplicada en R1                                |
+| [`scripts/sw1-config.txt`](scripts/sw1-config.txt)                     | Configuración aplicada en SW1                               |
+| [`scripts/verification-commands.md`](scripts/verification-commands.md) | Comandos de verificación                                    |
+| [`scripts/build-image.sh`](scripts/build-image.sh)                     | Construcción local de la imagen `zabbix:7.0-v1`             |
+| [`scripts/test-container.sh`](scripts/test-container.sh)               | Pruebas de funcionamiento de la imagen V1                   |
+| [`scripts/publish-image.sh`](scripts/publish-image.sh)                 | Publicación de la imagen V1 en Docker Hub                   |
+| [`docker/Zabbix/`](docker/Zabbix)                                      | Dockerfile, configuración y scripts internos del contenedor |
 
 Referencia detallada de cada script: [`docs/08-referencia-scripts.md`](docs/08-referencia-scripts.md).
 
