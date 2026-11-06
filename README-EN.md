@@ -53,7 +53,7 @@ graph LR
     SW -- "Gi0/0 to Fa0/0" --> R1["R1 - Cisco 7200<br/>Fa0/0 10.21.75.1/24<br/>DHCP server"]
 ```
 
-## 🌐 Addressing table
+## Addressing table
 
 Lab network: **`10.21.75.0/24`** (derived from student ID 2025-2175).
 
@@ -73,13 +73,13 @@ Lab network: **`10.21.75.0/24`** (derived from student ID 2025-2175).
 
 [![SW1 addressing and MAC table](images/03-sw1-ip-mac.png)](images/03-sw1-ip-mac.png)
 
-## 🖧 DHCP server
+## DHCP server
 
 Runs on R1: pool `LAN-20252175`, network `10.21.75.0/24`, gateway `10.21.75.1`, DNS `8.8.8.8`, domain `lab.local`, 8-hour lease, exclusions `10.21.75.1 – 10.21.75.10`. The Zabbix container requests its address with `dhclient` at startup and retries until it gets one.
 
 [![Zabbix as DHCP client](images/04-zabbix-dhcp-client.png)](images/04-zabbix-dhcp-client.png)
 
-## 🔐 Read-only SNMP
+## Read-only SNMP
 
 ```
 access-list 10 permit 10.21.75.0 0.0.0.255
@@ -90,33 +90,57 @@ snmp-server community RO_20252175 RO 10
 
 [![SNMP on SW1](images/06-sw1-snmp.png)](images/06-sw1-snmp.png)
 
-## 📦 Zabbix server (Docker container)
+## 📦 Zabbix Server (Docker Container)
 
-Image `zabbix:7.0`, built from [`docker/Zabbix`](docker/Zabbix): Zabbix server 7.0 LTS, Zabbix agent 2, MariaDB, Apache with PHP, Firefox ESR with openbox on the GNS3 VNC console, supervisord and a DHCP client. Full details in [`docs/04-contenedor-zabbix.md`](docs/04-contenedor-zabbix.md) and [`docs/07-persistencia.md`](docs/07-persistencia.md).
+This project uses a customized Docker image based on **Zabbix 7.0 LTS**, designed to run as an independent node inside GNS3.
 
-| GNS3 template field               | Value            |
-|-----------------------------------|------------------|
-| Name                              | `Zabbix`         |
-| Adapters                          | 1                |
-| Console type                      | `vnc`            |
-| Console resolution                | `1280x800`       |
-| Additional persistent directories | `/var/lib/mysql` |
+The image integrates Zabbix Server, Zabbix Agent 2, MariaDB, Apache/PHP, Firefox ESR and Openbox, along with network and SNMP diagnostic tools.
 
-## Functional validation
+**Published image:** [fredcastillo/zabbix-server](https://hub.docker.com/r/fredcastillo/zabbix-server)
 
-[![Hosts with SNMP available](images/07-zabbix-hosts-snmp.png)](images/07-zabbix-hosts-snmp.png)
+**Tag used in this lab:** `7.0-v1`
 
-[![R1 latest data](images/08-zabbix-latest-data-r1.png)](images/08-zabbix-latest-data-r1.png)
+### Included Components
 
-[![SW1 latest data](images/09-zabbix-latest-data-sw1.png)](images/09-zabbix-latest-data-sw1.png)
+| Component | Purpose |
+|---|---|
+| Zabbix Server 7.0 LTS | Centralized SNMP monitoring. |
+| Zabbix Agent 2 | Container self-monitoring. |
+| MariaDB | Configuration and monitoring data storage. |
+| Apache + PHP | Zabbix web frontend. |
+| Firefox ESR + Openbox | GNS3 VNC graphical environment. |
+| DHCP Client | Dynamic IP configuration on `eth0`. |
+| SNMP Utilities | Network monitoring and diagnostics. |
 
-[![Read-only test](images/10-snmp-read-only-test.png)](images/10-snmp-read-only-test.png)
+### Published Docker Image
 
-[![Persistence test](images/11-persistence-test.png)](images/11-persistence-test.png)
+| Tag | Description |
+|---|---|
+| `7.0-v1` | Image used and validated in the A2 lab. |
+| `latest` | Alias pointing to the same V1 image. |
 
-Detailed results: [`docs/06-verificacion.md`](docs/06-verificacion.md).
+To download the exact image used in this project:
 
-## 📂 Running-configs and 📜 scripts
+```bash
+docker pull fredcastillo/zabbix-server:7.0-v1
+```
+
+### GNS3 Persistence Configuration
+
+| Setting | Value |
+|---|---|
+| Console type | `vnc` |
+| Resolution | `1280x800` |
+| Network configuration | DHCP |
+| Persistent directory | `/var/lib/mysql` |
+
+MariaDB persistence preserves hosts, templates, credentials and monitoring data across GNS3 project restarts.
+
+**Source code:** [`docker/Zabbix/`](docker/Zabbix)
+
+**Technical documentation:** [`04-contenedor-zabbix.md`](docs/04-contenedor-zabbix.md) · [`07-persistencia.md`](docs/07-persistencia.md)
+
+## Running-configs and 📜 scripts
 
 - [R1 running-config](configs/R1/running-config.txt) · [SW1 running-config](configs/SW1/running-config.txt)
 - [`scripts/`](scripts) · [`docker/Zabbix/`](docker/Zabbix) · [Script reference](docs/08-referencia-scripts.md)
@@ -126,7 +150,9 @@ The technical documentation in `docs/` is written in Spanish. Spanish version: [
 ## 👨‍💻 Author
 
 **Fred Castillo**  
-*Cybersecurity Technology student*  
-*Aspiring Red Team | Offensive Security*
+*Information Security Technologist*  
+*Red Team | Offensive Security*
 
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Fred%20Castillo-0077B5?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/fredcastillo11/) [![GitHub](https://img.shields.io/badge/GitHub-fredcastillo-100000?style=for-the-badge&logo=github)](https://github.com/fredcastillo)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Fred%20Castillo-0077B5?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/fredcastillo11/)
+[![GitHub](https://img.shields.io/badge/GitHub-fredcastillo-100000?style=for-the-badge&logo=github)](https://github.com/fredcastillo)
+[![Docker Hub](https://img.shields.io/badge/Docker_Hub-fredcastillo-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://hub.docker.com/u/fredcastillo)
