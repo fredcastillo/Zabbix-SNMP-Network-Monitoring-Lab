@@ -1,5 +1,0 @@
-[mysqld]
-character-set-server    = utf8mb4
-collation-server        = utf8mb4_bin
-bind-address            = 127.0.0.1
-innodb_buffer_pool_size = 256M
