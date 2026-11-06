@@ -1,79 +1,49 @@
-# 05 — Monitoreo SNMP en Zabbix
+# 05 — Monitorización SNMP en Zabbix
 
-Este documento describe cómo se registran R1 y SW1 en Zabbix y qué datos se recolectan.
+Este documento describe cómo se registraron R1 y SW1 en Zabbix y qué datos consulta la plantilla Cisco IOS by SNMP.
 
 ## 1. Acceso inicial
 
-Dentro de la consola VNC del nodo Zabbix, Firefox abre `http://127.0.0.1/zabbix/`. Se ingresa con `Admin` / `zabbix` y se cambia la clave en *Users → Users → Admin → Change password*.
+Dentro de la consola VNC del nodo Zabbix, Firefox abre `http://127.0.0.1/zabbix/`. El usuario inicial es `Admin` y la contraseña `zabbix`. Cambia la contraseña en el primer acceso.
 
-## 2. Macro de la comunidad SNMP
+## 2. Macro de comunidad SNMP
 
-Los hosts usan la macro `{$SNMP_COMMUNITY}` en el campo de comunidad de su interfaz. El valor real se define una sola vez por host en la pestaña *Macros*. De este modo la comunidad no se escribe en la interfaz y se puede cambiar sin tocar la configuración de las plantillas.
+Los hosts usan la macro `{$SNMP_COMMUNITY}` en la interfaz SNMP. En esta práctica, el valor configurado es `RO_20252175`.
 
-| Macro                  | Valor          |
-|------------------------|----------------|
-| `{$SNMP_COMMUNITY}`    | `RO_20252175`  |
+| Macro | Valor |
+|---|---|
+| `{$SNMP_COMMUNITY}` | `RO_20252175` |
 
-## 3. Alta de los hosts
+## 3. Hosts registrados
 
-*Data collection → Hosts → Create host*:
+| Campo | R1 | SW1 |
+|---|---|---|
+| Host name | `R1-20252175` | `SW1-20252175` |
+| Template | Cisco IOS by SNMP | Cisco IOS by SNMP |
+| Host group | Network devices | Network devices |
+| Interface | SNMP | SNMP |
+| IP | `10.21.75.1` | `10.21.75.2` |
+| Port | `161` | `161` |
+| SNMP version | SNMPv2c | SNMPv2c |
+| Community | `{$SNMP_COMMUNITY}` | `{$SNMP_COMMUNITY}` |
 
-| Campo             | R1                                  | SW1                                 |
-|-------------------|-------------------------------------|-------------------------------------|
-| Host name         | `R1-20252175`                       | `SW1-20252175`                      |
-| Templates         | Cisco IOS by SNMP                   | Cisco IOS by SNMP                   |
-| Host groups       | Network devices                     | Network devices                     |
-| Interface         | SNMP                                | SNMP                                |
-| IP address        | `10.21.75.1`                        | `10.21.75.2`                        |
-| Port              | `161`                               | `161`                               |
-| SNMP version      | SNMPv2                              | SNMPv2                              |
-| SNMP community    | `{$SNMP_COMMUNITY}`                 | `{$SNMP_COMMUNITY}`                 |
-| Macros            | `{$SNMP_COMMUNITY}` = `RO_20252175` | `{$SNMP_COMMUNITY}` = `RO_20252175` |
+## 4. Datos recolectados
 
-La plantilla *ICMP Ping* puede añadirse como complemento para medir disponibilidad y tiempo de respuesta por ICMP.
+La plantilla puede recopilar información del sistema (descripción, nombre, ubicación, contacto y uptime), disponibilidad SNMP, estado de interfaces, bits recibidos/enviados y errores. Algunas métricas de CPU, memoria o temperatura pueden no estar disponibles en imágenes virtuales IOSvL2/IOSv.
 
-### Alta por script
+## 5. Dónde consultar
 
-El mismo resultado se obtiene desde la consola auxiliar del contenedor con la API de Zabbix:
+| Dato | Ruta en Zabbix |
+|---|---|
+| Disponibilidad SNMP | Data collection → Hosts → Availability |
+| Valores actuales | Monitoring → Latest data |
+| Evolución temporal | Latest data → Graph del ítem |
+| Alertas | Monitoring → Problems |
 
-```
-ZPASS=CLAVE_DE_ADMIN zbx-add-hosts.sh
-```
+[![Hosts SNMP](../images/07-zabbix-hosts-snmp.png)](../images/07-zabbix-hosts-snmp.png)
+[![Latest data R1](../images/08-zabbix-latest-data-r1.png)](../images/08-zabbix-latest-data-r1.png)
+[![Latest data SW1](../images/09-zabbix-latest-data-sw1.png)](../images/09-zabbix-latest-data-sw1.png)
 
-El script inicia sesión, crea el grupo `Network devices` si no existe, busca las plantillas *Cisco IOS by SNMP* e *ICMP Ping* y crea los dos hosts con la interfaz SNMPv2 y la macro.
+## 6. Respaldo en la versión V1
 
-## 4. Qué recolecta la plantilla
-
-La plantilla *Cisco IOS by SNMP* consulta, entre otros:
-
-| Grupo                | Ejemplos                                                       |
-|----------------------|----------------------------------------------------------------|
-| Sistema              | Descripción del sistema, nombre, ubicación, contacto, uptime   |
-| Disponibilidad       | Disponibilidad del agente SNMP                                 |
-| Interfaces           | Estado operativo, bits recibidos y enviados, errores           |
-| Recursos             | CPU y memoria (según lo que soporte el equipo)                 |
-
-En equipos virtuales, algunos ítems de CPU, memoria o temperatura pueden quedar como *Not supported* porque la imagen no expone esos datos. Esto no afecta la recolección de los datos de sistema ni de las interfaces.
-
-## 5. Dónde ver los datos
-
-| Qué se quiere ver                       | Dónde                                                              |
-|-----------------------------------------|--------------------------------------------------------------------|
-| Disponibilidad SNMP de cada host        | *Data collection → Hosts* → columna Availability                   |
-| Valores recolectados                    | *Monitoring → Latest data* → filtrar por host                      |
-| Evolución de un valor                   | *Latest data* → enlace **Graph** del ítem                          |
-| Alertas                                 | *Monitoring → Problems*                                            |
-
-[![Hosts con SNMP disponible](../images/07-zabbix-hosts-snmp.png)](../images/07-zabbix-hosts-snmp.png)
-
-[![Latest data de R1](../images/08-zabbix-latest-data-r1.png)](../images/08-zabbix-latest-data-r1.png)
-
-[![Latest data de SW1](../images/09-zabbix-latest-data-sw1.png)](../images/09-zabbix-latest-data-sw1.png)
-
-## 6. Respaldo de los hosts
-
-```
-ZPASS=CLAVE_DE_ADMIN zbx-export.sh
-```
-
-Genera `/root/zabbix-hosts-export.yaml` con los hosts cuyo nombre contiene `20252175`. También puede hacerse desde la interfaz con *Data collection → Hosts → Export → YAML*.
+La imagen V1 no incluye un comando propio para exportar hosts a YAML. Utiliza la interfaz de Zabbix: **Data collection → Hosts → Export → YAML**. Para una copia completa de la base de datos, consulta [07-persistencia.md](07-persistencia.md).
